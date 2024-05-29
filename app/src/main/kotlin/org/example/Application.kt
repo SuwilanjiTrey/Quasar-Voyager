@@ -35,10 +35,10 @@ import io.ktor.response.respond
 
 import io.ktor.features.*
 
-
-
-
-
+class App {
+    val greeting: String
+        get() = "Hello, world!"
+}
 
 fun initDatabase() {
     val config = HikariConfig().apply {
