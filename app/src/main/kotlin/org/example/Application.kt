@@ -37,7 +37,7 @@ import io.ktor.features.*
 
 class App {
     val greeting: String
-        get() = "Hello, world!"
+        get() = "Hello student!"
 }
 
 fun initDatabase() {
