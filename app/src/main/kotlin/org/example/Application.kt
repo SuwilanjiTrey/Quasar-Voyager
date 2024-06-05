@@ -1,3 +1,5 @@
+package org.example
+
 import io.ktor.application.*
 import io.ktor.features.CORS
 import io.ktor.features.ContentNegotiation
