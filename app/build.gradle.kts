@@ -64,7 +64,7 @@ java {
 
 application {
     // Define the main class for the application.
-    mainClass = "org.example.ApplicationKt"
+    mainClass = "ApplicationKt"
 }
 tasks.named<Test>("test") {
     useJUnitPlatform()
