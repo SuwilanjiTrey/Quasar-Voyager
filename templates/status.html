@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quasar Voyager</title>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        .gif-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('static/quasar.gif') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="gif-background">
+        <!-- Additional content can go here -->
+    </div>
+
+    <script>
+        const serverUrl = 'http://localhost:8080';
+
+        function checkServerStatus() {
+            fetch(serverUrl)
+                .then(response => {
+                    if (response.ok) {
+                        // Server is up, redirect to the server URL
+                        window.location.href = serverUrl;
+                    } else {
+                        // Server is down, keep checking
+                        setTimeout(checkServerStatus, 5000); // Check every 5 seconds
+                    }
+                })
+                .catch(error => {
+                    // Handle network errors or server being down
+                    setTimeout(checkServerStatus, 5000); // Check every 5 seconds
+                });
+        }
+
+        // Start checking the server status
+        checkServerStatus();
+    </script>
+</body>
+</html>
