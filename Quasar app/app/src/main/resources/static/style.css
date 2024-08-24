@@ -1,0 +1,100 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+@font-face {
+    font-family: 'Write Nice';
+    src: url('Fonts/Write\ Nice.ttf') format('truetype');
+    /* Add other font variations if available (e.g., bold, italic) */
+}
+
+body {
+    height: 100vh;
+    background: url("crisp\ night\ with\ deer.jpg") no-repeat center;
+    background-size: cover;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Write Nice', sans-serif;
+    
+}
+
+.container {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.content {
+    position: absolute; /* Change position to absolute */
+    top: 40%; /* Position at 50% from the top */
+    left: 50%; /* Position at 50% from the left */
+    transform: translate(-50%, -50%); /* Center horizontally and vertically */
+    z-index: 1;
+    text-align: center;
+}
+
+h1 {
+    font-size: 50px; /* Adjust font size as needed */
+    color: #acf19e; /* Change text color */
+    margin-bottom: 20px; /* Add spacing */
+}
+
+h4, h3, p {
+    font-size: 16px; /* Adjust font size as needed */
+    color: #eff3ee; /* Change text color */
+    margin-bottom: 20px; /* Add spacing */
+}
+
+.formbox {
+    backdrop-filter: blur(10px);/* Semi-transparent white */
+    padding: 10px; /* Increase padding */
+    border-radius: 20px; /* Round edges */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Add shadow */
+    border-color: aliceblue;
+    border-width: 10px;
+}
+
+
+.bubbles
+{
+    position: relative;
+    display: flex;
+}
+.bubbles span
+{
+    position: relative;
+    width: 30px;
+    height: 30px;
+    background: #4fc3dc;
+    margin: 0 4px;
+    border-radius: 50%;
+    box-shadow: 0 0 0 10px #4fc3dc44,
+    0 0 50px #4fc3dc,
+    0 0 100px #4fc3dc;
+    animation: animate 15s linear infinite;
+    animation-duration: calc(125s / var(--i));
+}
+.bubbles span:nth-child(even)
+{
+    background: #ffdf00;
+    box-shadow: 0 0 0 10px #ffec6f,
+    0 0 50px #ffdf00,
+    0 0 100px #ffdf00; 
+}
+
+@keyframes animate
+{
+     0%
+     {
+        transform: translateY(100vh) scale(0);
+     }
+     100%
+     {
+        transform: translateY(-10vh) scale(1);
+     }
+}

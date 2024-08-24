@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Files Viewer</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!--<script src="/static/database.js"></script>  Ensure this path is correct -->
+    <link rel="stylesheet" href="/static/database.css">
+</head>
+<body>
+    <nav>
+        <ul class="nav-links">
+            <li><a href="http://localhost:3000/homepage.html">Home</a></li>
+            <li><a href="#">Manage Schedule</a></li>
+        </ul>
+    </nav>
+<div class="container">
+    <h1>Student information</h1>
+    <table id="addstudent" border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>fName</th>
+                <th>lname</th>
+                <th>password</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Rows will be dynamically added here -->
+        </tbody>
+    </table>
+
+    <h2>add new user</h2>
+    <form id="addstudentform">
+        <label for="fname">First Name:</label><br>
+        <input type="text" id="fname" name="fname" required><br>
+        <label for="lname">Last Name:</label><br>
+        <input type="text" id="lname" name="lname" required><br>
+        <label for="password">Password:</label><br>
+        <input type="password" id="password" name="password" required><br>
+        <button type="submit">Add</button>
+    </form>
+
+    
+    <form id="updateStudentForm" style="display: none;">
+        <h2>update Profile information</h2>
+        <label for="updateFname">First Name:</label><br>
+        <input type="text" id="updateFname" name="fname" required><br>
+        <label for="updateLname">Last Name:</label><br>
+        <input type="text" id="updateLname" name="lname" required><br>
+        <label for="updatePassword">Password:</label><br>
+        <input type="password" id="updatePassword" name="password" required><br>
+        <button type="submit">Update</button>
+    </form>
+</div>
+</body>
+
+
+
+   <script>
+// database.js
+function loadStudents() {
+    fetch('/studentInfo')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(students => {
+            const tableBody = $("#addstudent tbody");
+            tableBody.empty();
+            students.forEach(student => {
+                const row = $("<tr>");
+                row.append($("<td>").text(student.user_id));
+                row.append($("<td>").text(student.fname));
+                row.append($("<td>").text(student.lname));
+                row.append($("<td>").text(student.password));
+                const actions = $("<td>");
+                const deleteButton = $("<button>").text("Delete").click(function() {
+                    fetch('/studentInfo/' + student.user_id, { method: 'DELETE' })
+                        .then(response => {
+                            if (response.ok) {
+                                row.remove();
+                            } else {
+                                alert('Failed to delete student');
+                            }
+                        });
+                });
+
+                const updateButton = $("<button>").text("Update").click(function() {
+                    $("#updateStudentForm").data("student-id", student.user_id);
+                    $("#updateFname").val(student.fname);
+                    $("#updateLname").val(student.lname);
+                    $("#updatePassword").val(student.password);
+                    $("#updateStudentForm").show();
+                });
+
+                actions.append(deleteButton);
+                actions.append(updateButton);
+                row.append(actions);
+                tableBody.append(row);
+            });
+        })
+        .catch(error => {
+            console.error('There was a problem fetching student info:', error);
+        });
+}
+
+function setupStudentForm() {
+    $("#addstudentform").on("submit", function(event) {
+        event.preventDefault();
+        const fname = $("#fname").val();
+        const lname = $("#lname").val();
+        const password = $("#password").val();
+        fetch('/studentInfo', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ fname: fname, lname: lname, password: password })
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json().catch(() => {
+                return response.text();
+            });
+        })
+        .then(data => {
+            if (typeof data === 'string') {
+                alert(data);
+            } else {
+                loadStudents();
+                $("#fname").val('');
+                $("#lname").val('');
+                $("#password").val('');
+            }
+        })
+        .catch(error => {
+            console.error('There has been a problem with your fetch operation:', error);
+        });
+    });
+
+    $("#updateStudentForm").on("submit", function(event) {
+        event.preventDefault();
+        const id = $("#updateStudentForm").data("student-id");
+        const fname = $("#updateFname").val();
+        const lname = $("#updateLname").val();
+        const password = $("#updatePassword").val();
+        fetch('/studentInfo/' + id, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ fname: fname, lname: lname, password: password })
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json().catch(() => {
+                return response.text();
+            });
+        })
+        .then(data => {
+            if (typeof data === 'string') {
+                alert(data);
+            } else {
+                loadStudents();
+                $("#updateFname").val('');
+                $("#updateLname").val('');
+                $("#updatePassword").val('');
+                $("#updateStudentForm").hide();
+            }
+        })
+        .catch(error => {
+            console.error('There has been a problem with your fetch operation:', error);
+        });
+    });
+}
+
+// Document ready function to initialize everything
+$(document).ready(function() {
+    loadStudents();
+    setupStudentForm();
+});
+
+   </script>
+
+</html>

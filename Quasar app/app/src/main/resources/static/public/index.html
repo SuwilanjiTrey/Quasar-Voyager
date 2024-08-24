@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Player</title>
+    <link rel="stylesheet" href="styles.css">
+   <!-- <link rel="stylesheet" href="../shooting_stars.css">-->
+</head>
+<body>
+    
+    <div class="sectionUpload">  
+        
+        <div class="section-header" onclick="toggleSection('videoUpload')">Video Upload
+        
+            <a href="http://localhost:3000/homepage.html">go back</a>
+        </div>
+
+        <div class="section-content" id="videoUpload">
+            <form id="videoForm" class="upload-form" enctype="multipart/form-data">
+                <input type="file" id="videoInput" class="upload-input">
+                <button type="submit" class="submit-button">Upload Video</button>
+            </form>
+        </div>
+    </div>
+        <div class="video-section">
+           <div> <video id="videoPlayer" width="640" height="360" controls></video>
+		<textarea class="transcript-section" id="transcript"></textarea> </div>
+            <div id="videoThumbnails"></div>
+        </div>
+    
+	
+        <div class="section-header">Text Upload</div>
+               
+            <form id="textForm" class="upload-form">
+                <div>
+                    <input type="text" id="textFileName" class="text-input" placeholder="Enter file name">
+                    <button type="submit" class="submit-button">Submit Text</button>
+                </div>
+                <textarea id="textInput" rows="4" col="8" placeholder="Enter text"></textarea>
+                
+            </form>
+        </div>
+
+
+        <section>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+        </section>
+   
+    <script src="script.js"></script>
+</body>
+</html>

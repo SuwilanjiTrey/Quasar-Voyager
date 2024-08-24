@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>student assistant</title>
+    
+    <link rel="stylesheet" href="assistantstyles.css">
+</head>
+<body>
+<nav class="navbar">
+    <div class="container1">
+        <div class="">
+            <ul>
+                <li><h4><a href="http://localhost:3000/index.html">watch videos</a></h></li>
+                <li><h4><a href="http://localhost:8080/schedule">schedule time table</a></h></li>
+
+                <li><h4><a href="http://localhost:3000/notes.html">view notes</a></h4></li>
+
+            </ul>
+            <div>
+                <a href="http://localhost:8080/database" class="button">profile</a>
+                
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="sidebar">
+    <div class="heading">
+        <a href="http://localhost:8080">Quasar</a>
+    </div>
+    <div class="section-header" onclick="toggleSection('bookUpload')"><h2>Book Upload</h2></div>
+    <div class="section-content" id="bookUpload">
+        <form id="bookForm" class="upload-form" enctype="multipart/form-data">
+            <input type="file" id="bookInput" class="upload-input">
+            <button type="submit" class="submit-button">Upload Book</button>
+        </form>
+    </div>
+</div>
+
+<div class="library">
+    <h1>Book Library</h1>
+    <div class="book-list">
+        <!-- Placeholder for dynamically generated book listings -->
+        <!-- Each book should be a clickable element -->
+        <!-- For demonstration, let's use simple <div> elements -->
+        <!-- Dynamically generated book listings will be added here -->
+    </div>
+</div>
+<div class="book-section">
+    <iframe id="bookViewer" src="" style="width: 100%; height: 100%; border: none;"></iframe>
+</div>
+
+</body>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    // Function to upload book file
+    function uploadBook(formData) {
+        console.log("Book Form Data:", formData); // Log the form data before sending the request
+
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', 'http://localhost:8080/upload', true); // Replace with your server endpoint
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                console.log(xhr.responseText);
+                // After successful upload, update the book library
+                updateBookLibrary();
+            } else {
+                console.error('Book upload failed');
+            }
+        };
+        xhr.send(formData);
+    }
+
+    // Event listener for book form submission
+    document.getElementById('bookForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        console.log("Book form submitted"); // Log to check if event listener is triggered
+        alert('File uploaded successfully.');
+        const formData = new FormData();
+        const fileInput = document.getElementById('bookInput');
+        const file = fileInput.files[0];
+        formData.append('book', file);
+        uploadBook(formData);
+    });
+
+    // Function to update book library with dynamically generated book listings
+    function updateBookLibrary() {
+        const bookList = document.querySelector('.book-list');
+
+        fetch('/books') // Change the API endpoint to match your server route
+            .then(response => response.json())
+            .then(books => {
+                books.forEach(book => {
+                    const bookItem = document.createElement('div');
+                    bookItem.textContent = book.name; // Use the book name from the server response
+                    bookItem.classList.add('book-item');
+                    bookItem.addEventListener('click', () => {
+                        console.log(`Book clicked: ${book.name}`);
+                        // Additional logic to handle book viewing
+                        // Set the iframe source to the book URL
+                        document.getElementById('bookViewer').src = book.url;
+                    });
+                    bookList.appendChild(bookItem);
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching books:', error);
+            });
+    }
+
+    // Initial update of book library when the page loads
+    updateBookLibrary();
+});
+</script>
+
+</html>

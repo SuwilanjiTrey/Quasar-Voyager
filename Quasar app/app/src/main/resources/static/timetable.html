@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Timetable</title>
+    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css' rel='stylesheet' />
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js'></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="\static\studystyle.css">
+    <link rel="stylesheet" href="/static/database.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        nav {
+            position: sticky;
+            z-index: 99;
+            width: 100%;
+            background: #242526;
+        }
+        nav .wrapper {
+            position: relative;
+            max-width: 1300px;
+            padding: 0px 30px;
+            height: 70px;
+            line-height: 70px;
+            margin: auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .wrapper .logo a {
+            color: #f2f2f2;
+            font-size: 30px;
+            font-weight: 600;
+            text-decoration: none;
+        }
+        .wrapper .nav-links {
+            display: inline-flex;
+        }
+        .nav-links li {
+            list-style: none;
+            position: relative;
+        }
+        .nav-links li a {
+            color: #f2f2f2;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: 500;
+            padding: 9px 15px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+        .nav-links li a:hover {
+            background: #3A3B3C;
+        }
+        .nav-links .mobile-item {
+            display: none;
+        }
+        .nav-links .drop-menu {
+            position: absolute;
+            background: #242526;
+            width: 500px; /* Adjusted for full width */
+            line-height: 50px;
+            top: 100%;
+            left: 0;
+            opacity: 0;
+            visibility: hidden;
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+            padding: 5px; /* Reduced padding for better spacing */
+            border-radius: 5px;
+        }
+        .nav-links li:hover .drop-menu {
+            opacity: 1;
+            visibility: visible;
+        }
+        .drop-menu li div {
+            width: 100%; /* Adjusted for full width */
+            height: 140%; /* Set a fixed height for the calendar */
+            display: block;
+            
+            font-weight: 10;
+            border-radius: 0px;
+            overflow: hidden;
+	/* Ensure no overflow */
+        }
+        #calendar {
+            max-width: 100%;
+            height: 10%; /* Adjust height to fill the container */
+            margin: 0; /* Removed extra margins */
+        }
+
+        /* Additional adjustments for smaller screens */
+        @media screen and (max-width: 970px) {
+            .wrapper .btn {
+                display: block;
+            }
+            .wrapper .nav-links {
+                position: fixed;
+                height: 100vh;
+                width: 100%;
+                max-width: 350px;
+                top: 0;
+                left: -100%;
+                background: #242526;
+                display: block;
+                padding: 50px 10px;
+                line-height: 50px;
+                overflow-y: auto;
+                box-shadow: 0px 15px 15px rgba(0,0,0,0.18);
+                transition: all 0.3s ease;
+            }
+            ::-webkit-scrollbar {
+                width: 10px;
+            }
+            ::-webkit-scrollbar-track {
+                background: #242526;
+            }
+            ::-webkit-scrollbar-thumb {
+                background: #3A3B3C;
+            }
+            #menu-btn:checked ~ .nav-links {
+                left: 0%;
+            }
+            #menu-btn:checked ~ .btn.menu-btn {
+                display: none;
+            }
+            #close-btn:checked ~ .btn.menu-btn {
+                display: block;
+            }
+            .nav-links li {
+                margin: 15px 10px;
+            }
+            .nav-links li a {
+                padding: 0 20px;
+                display: block;
+                font-size: 20px;
+            }
+            .nav-links .drop-menu {
+                position: static;
+                opacity: 1;
+                top: 65px;
+                visibility: visible;
+                padding-left: 20px;
+                width: 100%;
+                max-height: 0px;
+                overflow: hidden;
+                box-shadow: none;
+                transition: all 0.3s ease;
+            }
+            #showDrop:checked ~ .drop-menu {
+                max-height: 100%;
+            }
+            .nav-links .desktop-item {
+                display: none;
+            }
+            .nav-links .mobile-item {
+                display: block;
+                color: #f2f2f2;
+                font-size: 10px;
+                font-weight: 100;
+                padding-left: 20px;
+                cursor: pointer;
+                border-radius: 5px;
+                transition: all 0.3s ease;
+            }
+            .nav-links .mobile-item:hover {
+                background: #3A3B3C;
+            }
+            .drop-menu li {
+                margin: 0;
+            }
+            .drop-menu li a {
+                border-radius: 5px;
+                font-size: 18px;
+            }
+            .mega-box {
+                position: static;
+                top: 65px;
+                opacity: 1;
+                visibility: visible;
+                padding: 0 20px;
+                max-height: 0px;
+                overflow: hidden;
+                transition: all 0.3s ease;
+            }
+            .mega-box .content {
+                box-shadow: none;
+                flex-direction: column;
+                padding: 20px 20px 0 20px;
+            }
+            .mega-box .content .row {
+                width: 100%;
+                margin-bottom: 15px;
+                border-top: 1px solid rgba(255,255,255,0.08);
+            }
+            .mega-box .content .row:nth-child(1),
+            .mega-box .content .row:nth-child(2) {
+                border-top: 0px;
+            }
+            .content .row .mega-links {
+                border-left: 0px;
+                padding-left: 15px;
+            }
+            .row .mega-links li {
+                margin: 0;
+            }
+            .content .row header {
+                font-size: 19px;
+            }
+        }
+        nav input {
+            display: none;
+        }
+    </style>
+  
+</head>
+<body>
+    <nav>
+        <div class="wrapper">
+          <div class="logo"><a href="#">Quasar Voyager</a></div>
+          <input type="radio" name="slider" id="menu-btn">
+          <input type="radio" name="slider" id="close-btn">
+          <ul class="nav-links">
+            <li><a href="http://localhost:3000/homepage.html">Home</a></li>
+
+            
+            <li>
+                <a href="#" class="desktop-item">Check calendar</a>
+                <input type="checkbox" id="showDrop">
+                <label for="showDrop" class="mobile-item">Dropdown Menu</label>
+                <ul class="drop-menu">
+                    <li><div id="calendar"></div></li>
+                </ul>
+            </li>
+            
+            
+          </ul>
+          <label for="menu-btn" class="btn menu-btn"><i class="fas fa-bars"></i></label>
+        </div>
+      </nav>
+    <div class="container">
+        <h1>School Timetable</h1>
+        <table id="timetable" border="1">
+            <thead>
+                <tr>
+                    <!--<th>Entry ID</th>-->
+                    <th>Course Code</th>
+                    <th>Course Name</th>
+                    <th>Start Time</th>
+                    <th>End Time</th>
+                    <th>Day of the Week</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Rows will be dynamically added here -->
+            </tbody>
+        </table>
+
+        
+        <form id="addTimetableForm">
+            <h2>Add Timetable Entry</h2>
+            <label for="course_code">Course Code:</label><br>
+            <input type="text" id="course_code" name="course_code" required><br>
+            <label for="course_name">Course Name:</label><br>
+            <input type="text" id="course_name" name="course_name" required><br>
+            <label for="class_start_time">Start Time (HH:mm):</label><br>
+            <input type="time" id="class_start_time" name="class_start_time" required><br>
+            <label for="class_end_time">End Time (HH:mm):</label><br>
+            <input type="time" id="class_end_time" name="class_end_time" required><br>
+            <label for="day_of_week">Day of the Week:</label><br>
+            <input type="text" id="day_of_week" name="day_of_week" required><br>
+            <button type="submit">Add</button>
+        </form>
+
+        <form id="updateTimetableForm" style="display: none;">
+            <h2>Update Timetable Entry</h2>
+            <label for="update_course_code">Course Code:</label><br>
+            <input type="text" id="update_course_code" name="course_code" required><br>
+            <label for="update_course_name">Course Name:</label><br>
+            <input type="text" id="update_course_name" name="course_name" required><br>
+            <label for="update_start_time">Start Time (HH:mm):</label><br>
+            <input type="time" id="update_start_time" name="class_start_time" required><br>
+            <label for="update_end_time">End Time (HH:mm):</label><br>
+            <input type="time" id="update_end_time" name="class_end_time" required><br>
+            <label for="update_day_of_week">Day of the Week:</label><br>
+            <input type="text" id="update_day_of_week" name="day_of_week" required><br>
+            <button type="submit">Update</button>
+        </form>
+    </div>
+</body>
+<script>
+    function loadTimetable() {
+    fetch('/timetable')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(entries => {
+            const tableBody = $("#timetable tbody");
+            tableBody.empty();
+            entries.forEach(entry => {
+                const row = $("<tr>");
+                //row.append($("<td>").text(entry.entry_id));
+                
+                row.append($("<td>").text(entry.course_code));
+                row.append($("<td>").text(entry.course_name));
+                row.append($("<td>").text(entry.class_start_time));
+                row.append($("<td>").text(entry.class_end_time));
+                row.append($("<td>").text(entry.day_of_week));
+                const actions = $("<td>");
+                const deleteButton = $("<button>").text("Delete").click(function() {
+                    fetch('/timetable/' + entry.entry_id, { method: 'DELETE' })
+                        .then(response => {
+                            if (response.ok) {
+                                row.remove();
+                            } else {
+                                alert('Failed to delete entry');
+                            }
+                        });
+                });
+
+                const updateButton = $("<button>").text("Update").click(function() {
+                    $("#addTimetableForm").hide();
+                    $("#updateTimetableForm").data("entry-id", entry.entry_id);
+                    
+                    $("#update_course_code").val(entry.course_code);
+                    $("#update_course_name").val(entry.course_name);
+                    $("#update_start_time").val(entry.class_start_time);
+                    $("#update_end_time").val(entry.class_end_time);
+                    $("#update_day_of_week").val(entry.day_of_week);
+                    $("#updateTimetableForm").show();
+                });
+
+                actions.append(deleteButton);
+                actions.append(updateButton);
+                row.append(actions);
+                tableBody.append(row);
+            });
+        })
+        .catch(error => {
+            console.error('There was a problem fetching the timetable:', error);
+        });
+}
+
+function setupTimetableForm() {
+    $("#addTimetableForm").on("submit", function(event) {
+        event.preventDefault();
+        
+       /**/ const course_code = $("#course_code").val();
+       const course_name = $("#course_name").val();
+        const startTime = $("#class_start_time").val();
+        const endTime = $("#class_end_time").val();
+        const dayOfWeek = $("#day_of_week").val();
+
+        fetch('/timetable', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+               course_code: course_code,
+               course_name: course_name,
+                class_start_time: startTime,
+                class_end_time: endTime,
+                day_of_week: dayOfWeek
+            })
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json().catch(() => response.text());
+        })
+        .then(data => {
+            if (typeof data === 'string') {
+                alert(data);
+            } else {
+                loadTimetable();
+               $("#course_code").val('');
+               $("#course_name").val('');
+                $("#class_start_time").val('');
+                $("#class_end_time").val('');
+                $("#day_of_week").val('');
+            }
+        })
+        .catch(error => {
+            console.error('There has been a problem with your fetch operation:', error);
+        });
+    });
+
+
+    $("#updateTimetableForm").on("submit", function(event) {
+        event.preventDefault();
+        const id = $("#updateTimetableForm").data("entry-id");
+        const course_code = $("#update_course_code").val();
+        const course_name = $("#update_course_name").val();
+        const startTime = $("#update_start_time").val();
+        const endTime = $("#update_end_time").val();
+        const dayOfWeek = $("#update_day_of_week").val();
+        fetch('/timetable/' + id, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                course_code: course_code,
+                course_name: course_name, 
+                class_start_time: startTime, class_end_time: endTime, day_of_week: dayOfWeek })
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json().catch(() => response.text());
+        })
+        .then(data => {
+            if (typeof data === 'string') {
+                alert(data);
+            } else {
+                loadTimetable();
+                $("#update_course_code").val('');
+                $("#update_course_name").val('');
+                $("#update_start_time").val('');
+                $("#update_end_time").val('');
+                $("#update_day_of_week").val('');
+                $("#updateTimetableForm").hide();
+            }
+        })
+        .catch(error => {
+            console.error('There has been a problem with your fetch operation:', error);
+        });
+    });
+}
+
+$(document).ready(function() {
+    loadTimetable();
+    setupTimetableForm();
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,timeGridWeek,timeGridDay'
+            },
+            events: [
+                // Sample events data, replace with your own events
+                /*{
+                    title: 'Event 1',
+                    start: '2024-05-01'
+                },
+                {
+                    title: 'Event 2',
+                    start: '2024-05-07'
+                },
+                {
+                    title: 'Event 3',
+                    start: '2024-05-09'
+                },
+                {
+                    title: 'Event 4',
+                    start: '2024-05-16'
+                },
+                {
+                    title: 'Event 5',
+                    start: '2024-05-20'
+                }*/
+            ]
+        });
+
+        calendar.render();
+    });
+
+    </script>
+</html>

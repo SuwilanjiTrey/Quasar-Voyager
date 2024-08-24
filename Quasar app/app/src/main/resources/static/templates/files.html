@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uploaded Files</title>
+    <script>
+        function fetchFiles() {
+            fetch('http://localhost:8080/files')
+                .then(response => response.json())
+                .then(data => {
+                    const list = document.getElementById('fileList');
+                    list.innerHTML = '';
+                    data.forEach(file => {
+                        const listItem = document.createElement('li');
+                        listItem.textContent = `${file.name} (${file.type})`;
+                        
+                        const updateButton = document.createElement('button');
+                        updateButton.textContent = 'Update';
+                        updateButton.onclick = () => updateFile(file.id);
+                        
+                        const deleteButton = document.createElement('button');
+                        deleteButton.textContent = 'Delete';
+                        deleteButton.onclick = () => deleteFile(file.id);
+
+                        listItem.appendChild(updateButton);
+                        listItem.appendChild(deleteButton);
+                        list.appendChild(listItem);
+                    });
+                });
+        }
+
+        function updateFile(id) {
+            const newName = prompt('Enter new name:');
+            const newType = prompt('Enter new type:');
+            if (newName && newType) {
+                fetch(`http://localhost:8080/files/${id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ name: newName, type: newType })
+                }).then(fetchFiles);
+            }
+        }
+
+        function deleteFile(id) {
+            fetch(`http://localhost:8080/files/${id}`, {
+                method: 'DELETE'
+            }).then(fetchFiles);
+        }
+
+        document.addEventListener('DOMContentLoaded', fetchFiles);
+    </script>
+</head>
+<body>
+    <h1>Uploaded Files</h1>
+    <ul id="fileList"></ul>
+</body>
+</html>

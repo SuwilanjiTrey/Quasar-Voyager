@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Student Assistant</title>
+    <link rel="stylesheet" href="assistantstyles.css">
+</head>
+<body>
+<nav class="navbar">
+    <div class="container1">
+        <ul>
+            <li><h4><a href="http://localhost:3000/index.html">Watch Videos</a></h4></li>
+            <li><h4><a href="http://localhost:8080/schedule">Schedule Timetable</a></h4></li>
+            <li><h4><a href="http://localhost:3000/homepage.html">Read books</a></h4></li>
+        </ul>
+        <div>
+            
+            <a href="http://localhost:8080/database" class="button">Profile</a>
+        </div>
+    </div>
+</nav>
+
+<div class="sidebar">
+    <div class="heading">
+        <a href="http://localhost:8080">Quasar</a>
+    </div>
+    <div class="section-header" onclick="toggleSection('noteUpload')"><h2>Notes</h2></div>
+    <div class="section-content" id="noteUpload">
+        <form id="noteForm" class="upload-form" enctype="multipart/form-data">
+            <input type="file" id="noteInput" class="upload-input">
+            <button type="submit" class="submit-button">Upload New Notes</button>
+        </form>
+    </div>
+</div>
+
+<div class="library">
+    <h1>Notes Library</h1>
+    <div class="note-list">
+        <!-- Placeholder for dynamically generated note listings -->
+    </div>
+</div>
+<div class="note-section">
+    <textarea id="noteViewer" style="width: 100%; height: 100%; border: none;"></textarea>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('noteForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const formData = new FormData();
+        const fileInput = document.getElementById('noteInput');
+        const file = fileInput.files[0];
+        formData.append('note', file);
+        uploadNote(formData);
+    });
+
+    function uploadNote(formData) {
+        fetch('http://localhost:8080/upload', {
+            method: 'POST',
+            body: formData,
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.text();
+        })
+        .then(data => {
+            console.log('Success:', data);
+            alert('File uploaded successfully.');
+            updateNoteLibrary();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error uploading file.');
+        });
+    }
+
+    function updateNoteLibrary() {
+        const noteList = document.querySelector('.note-list');
+        fetch('/notes')
+            .then(response => response.json())
+            .then(notes => {
+                noteList.innerHTML = '';
+                notes.forEach(note => {
+                    const noteItem = document.createElement('div');
+                    noteItem.textContent = note.name;
+                    noteItem.classList.add('note-item');
+                    noteItem.addEventListener('click', () => {
+                        fetch(note.url)
+                            .then(response => response.text())
+                            .then(content => {
+                                document.getElementById('noteViewer').value = content;
+                            })
+                            .catch(error => {
+                                console.error('Error fetching note content:', error);
+                            });
+                    });
+                    noteList.appendChild(noteItem);
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching notes:', error);
+            });
+    }
+
+    updateNoteLibrary();
+});
+</script>
+</body>
+</html>

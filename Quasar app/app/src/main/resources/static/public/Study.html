@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="study.css">
+    <title>Study</title>
+</head>
+<body>
+    <nav>
+        <div class="wrapper">
+          <div class="logo"><a href="#">Quasar Voyager</a></div>
+          <input type="radio" name="slider" id="menu-btn">
+          <input type="radio" name="slider" id="close-btn">
+          <ul class="nav-links">
+            <label for="close-btn" class="btn close-btn"><i class="fas fa-times"></i></label>
+            <li><a href="http://localhost:3000/homepage.html">Home</a></li>
+            <li><a href="http://localhost:8080/schedule">Today</a></li> 
+            
+            <li>
+              <a href="#" class="desktop-item">Schedule</a>
+              <input type="checkbox" id="showDrop">
+              <label for="showDrop" class="mobile-item">Dropdown Menu</label>
+              <ul class="drop-menu">
+                <li><a href="#">Create</a></li>
+                <li><a href="#">Update</a></li>
+                <li><a href="#">Delete</a></li>
+                <li><a href="#">Edit</a></li>
+              </ul>
+            </li>
+            <li><a href="#">Feedback</a></li>
+          </ul>
+          <label for="menu-btn" class="btn menu-btn"><i class="fas fa-bars"></i></label>
+        </div>
+    </nav>
+    <body>
+        <div class="container">
+          <table class="dashboard">
+            <tbody class="body" id="">
+              <tr>
+                <td>
+                  <div class="Pend">
+                    <div class="Number">24</div>
+                    <div class="Work">Assignments</div>
+                    <div class="Status">Pending</div>
+                  </div>
+                </td>
+                <td>
+                  <div class="Complete">
+                    <div class="Number">2</div>
+                    <div class="Work">Assignments</div>
+                    <div class="Status">Done</div>
+                  </div>
+                </td>
+                <td>
+                  <div class="Due">
+                    <div class="Number">4</div>
+                    <div class="Work">Assignments</div>
+                    <div class="Status">Due</div>
+                  </div>
+                </td>
+                <td>
+                  <div class="Assessments">
+                    <div class="Number">1</div>
+                    <div class="Work">Quiz</div>
+                    <div class="Status">Pending</div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </body>
+</html>

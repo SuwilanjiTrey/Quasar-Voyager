@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+  <link rel="stylesheet" href="\static\studystyle.css">
+  <title>Welcome</title>
+</head>
+<body>
+  <nav>
+    <div class="wrapper">
+      <div class="logo"><a href="http://localhost:8080">Quasar Voyager</a></div>
+      <input type="radio" name="slider" id="menu-btn">
+      <input type="radio" name="slider" id="close-btn">
+      <ul class="nav-links">
+        
+        <li><a href="http://localhost:3000/homepage.html">Home</a></li>
+
+        <li>
+          <a href="#" class="desktop-item">Schedule</a>
+          <input type="checkbox" id="showDrop">
+          <label for="showDrop" class="mobile-item">Dropdown Menu</label>
+          <ul class="drop-menu">
+            <li><a href="http://localhost:8080/time">Manage Schedule</a></li>
+            
+          </ul>
+        </li>
+        <li><a href="#">Feedback</a></li>
+      </ul>
+      <label for="menu-btn" class="btn menu-btn"><i class="fas fa-bars"></i></label>
+    </div>
+  </nav>
+  <div class="notifications">
+      <table class="Reminders">
+        <tbody>
+          <thead>
+            <tr><td>Today</td></tr>
+
+            
+          </thead>
+        </tbody>
+      </table>
+  </div>
+  <script>
+    function getToday() {
+      const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+      const today = new Date();
+      return days[today.getDay()];
+    }
+
+    function loadCoursesForToday() {
+      const today = getToday();
+      fetch(`/today?day_of_week=${today}`)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(courses => {
+          displayCourses(courses);
+        })
+        .catch(error => {
+          console.error('There was a problem fetching the courses:', error);
+        });
+    }
+
+    function displayCourses(courses) {
+      const tableBody = document.querySelector(".Reminders tbody");
+      tableBody.innerHTML = ''; // Clear existing content
+
+      const row = document.createElement('tr');
+
+      courses.forEach(course => {
+        const td = document.createElement('td');
+        const courseContent = document.createElement('div');
+        courseContent.className = 'course-content';
+
+        const img = document.createElement('img');
+        img.src = '\static\\public\\chatbot.jpg';
+        img.className = 'icon';
+
+        const courseDiv = document.createElement('div');
+        courseDiv.className = 'course';
+        courseDiv.textContent = course.course_code;
+
+        const timeDiv = document.createElement('div');
+        timeDiv.className = 'time';
+        timeDiv.textContent = `${course.class_start_time}-${course.class_end_time}`;
+
+        const lectureDiv = document.createElement('div');
+        lectureDiv.className = 'lecture';
+        lectureDiv.textContent = `Lecture`;
+
+        courseContent.appendChild(img);
+        courseContent.appendChild(courseDiv);
+        courseContent.appendChild(timeDiv);
+        courseContent.appendChild(lectureDiv);
+
+        td.appendChild(courseContent);
+        row.appendChild(td);
+      });
+
+      tableBody.appendChild(row);
+    }
+
+    document.addEventListener('DOMContentLoaded', (event) => {
+      loadCoursesForToday();
+    });
+  </script>
+</body>
+</html>

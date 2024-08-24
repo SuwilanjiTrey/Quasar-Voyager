@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Page</title>
+    <style>
+        /* Add your CSS styles here */
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .section {
+            margin: 20px;
+            padding: 20px;
+            border: 1px solid black;
+            width: 80%;
+        }
+        .section-header {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        .upload-form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .upload-input {
+            margin-bottom: 10px;
+        }
+        .text-input {
+            width: 200px;
+            margin-bottom: 10px;
+        }
+        .submit-button {
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="section">
+            <div class="section-header">Video Upload</div>
+            <form id="videoForm" class="upload-form" enctype="multipart/form-data">
+                <input type="file" id="videoInput" class="upload-input">
+                <button type="submit" class="submit-button">Upload Video</button>
+            </form>
+
+	   <div id="videoSelection">
+        <h2>Select Videos</h2>
+        <div id="videoList"></div>
+    </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-header">Text Upload</div>
+            <form id="textForm" class="upload-form">
+                <input type="text" id="textFileName" class="text-input" placeholder="Enter file name">
+                <textarea id="textInput" rows="4" cols="50" placeholder="Enter text"></textarea>
+                <button type="submit" class="submit-button">Submit Text</button>
+            </form>
+        </div>
+
+        <div class="section">
+            <div class="section-header">Transcript</div>
+            <textarea id="transcript" rows="10" cols="50" readonly></textarea>
+        </div>
+
+        <div class="section">
+            <div class="section-header">Notes</div>
+            <div id="notes"></div>
+        </div>
+    </div>
+
+    <!-- Your JavaScript code goes here -->
+    <script src="upload.js"></script>
+</body>
+</html>

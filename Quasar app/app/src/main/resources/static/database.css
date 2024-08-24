@@ -1,0 +1,76 @@
+body {
+    font-family: Arial, sans-serif;
+    background: url('/static/database.jpeg') no-repeat center center fixed; /* Add your background image here */
+    background-size: cover;
+    color: white;
+}
+
+nav {
+    background-color: rgb(1, 1, 41);
+    padding: 1em;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    justify-content: space-around;
+    padding: 0;
+    margin: 0;
+}
+
+.nav-links li {
+    display: inline;
+}
+
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    padding: 0.5em 1em;
+    transition: background-color 0.3s;
+}
+
+.nav-links a:hover {
+    background-color: white;
+    color: rgb(0, 0, 58);
+    cursor: pointer;
+}
+
+.container {
+    margin: 2em;
+    padding: 2em;
+    background-color: rgba(0, 0, 0, 0.7); /* Slightly transparent background */
+    border-radius: 10px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1em 0;
+}
+
+th, td {
+    border: 1px solid white;
+    padding: 0.5em;
+    text-align: left;
+}
+
+th {
+    background-color: rgb(2, 2, 22);
+}
+
+td {
+    background-color: rgba(0, 0, 0, 0.5); /* Slightly transparent background for table rows */
+}
+
+button {
+    background-color: rgb(58, 58, 139);
+    color: rgb(31, 9, 9);
+    border: none;
+    padding: 0.5em 1em;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: white;
+    color: navy;
+}
