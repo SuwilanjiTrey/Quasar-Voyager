@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reminder Service</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Set a Reminder</h1>
+    <form id="reminderForm">
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" required>
+      
+      <label for="reminder">Reminder:</label>
+      <textarea id="reminder" name="reminder" required></textarea>
+      
+      <button type="submit">Set Reminder</button>
+    </form>
+    <div id="message"></div>
+  </div>
+  <script>
+    document.getElementById('reminderForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+      
+        const email = document.getElementById('email').value;
+        const reminder = document.getElementById('reminder').value;
+      
+        fetch('/set-reminder', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ email, reminder })
+        })
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById('message').innerText = data.message;
+        })
+        .catch(error => {
+          document.getElementById('message').innerText = 'An error occurred. Please try again.';
+        });
+      });
+  </script>
+</body>
+</html>
